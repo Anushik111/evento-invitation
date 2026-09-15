@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html lang="hy">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evento — Wedding Invitation</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      background: #eee7dc;
+      color: #3d332d;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .envelope-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      background: #e8dfd3;
+    }
+
+    .envelope {
+      width: min(420px, 90vw);
+      height: 290px;
+      position: relative;
+      cursor: pointer;
+      perspective: 1000px;
+    }
+
+    .envelope-back {
+      position: absolute;
+      inset: 0;
+      background: #d8c5ad;
+      border-radius: 4px;
+      box-shadow: 0 20px 50px rgba(70, 50, 35, 0.18);
+    }
+
+    .envelope-front {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 72%;
+      background: #cdb79d;
+      clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+      z-index: 3;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 65%;
+      background: #ddcbb4;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top;
+      transition: transform 1s ease;
+      z-index: 4;
+    }
+
+    .seal {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      transform: translate(-50%, -50%);
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: #7a2634;
+      color: #f5e9dc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      z-index: 5;
+      box-shadow: 0 5px 15px rgba(0,0,0,.15);
+    }
+
+    .envelope-text {
+      position: absolute;
+      bottom: -70px;
+      width: 100%;
+      text-align: center;
+      color: #5b4c41;
+      font-size: 14px;
+      letter-spacing: 2px;
+    }
+
+    .invitation {
+      display: none;
+      opacity: 0;
+      min-height: 100vh;
+      animation: appear 1.2s ease forwards;
+    }
+
+    @keyframes appear {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 25px;
+      background:
+        linear-gradient(rgba(245,238,228,.78), rgba(245,238,228,.88)),
+        radial-gradient(circle at center, #d9c7b1, #eee7dc 65%);
+    }
+
+    .hero-inner {
+      max-width: 700px;
+    }
+
+    .small-title {
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      font-size: 12px;
+      margin-bottom: 35px;
+      color: #806d5d;
+    }
+
+    .names {
+      font-size: clamp(45px, 9vw, 82px);
+      font-weight: normal;
+      line-height: 1.05;
+      color: #522b31;
+    }
+
+    .ampersand {
+      font-style: italic;
+      font-size: 38px;
+      margin: 12px 0;
+      color: #9a756b;
+    }
+
+    .date {
+      margin-top: 35px;
+      font-size: 19px;
+      letter-spacing: 4px;
+    }
+
+    .divider {
+      width: 70px;
+      height: 1px;
+      background: #9d8977;
+      margin: 35px auto;
+    }
+
+    .message {
+      max-width: 500px;
+      margin: auto;
+      line-height: 1.9;
+      font-size: 17px;
+      color: #62554b;
+    }
+
+    .section {
+      padding: 90px 25px;
+      text-align: center;
+      background: #f5eee4;
+    }
+
+    .section:nth-child(even) {
+      background: #e9dfd3;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: normal;
+      margin-bottom: 35px;
+      color: #522b31;
+    }
+
+    .details {
+      max-width: 650px;
+      margin: auto;
+      display: grid;
+      gap: 20px;
+    }
+
+    .detail {
+      padding: 25px;
+      border: 1px solid rgba(90,70,55,.2);
+    }
+
+    .detail h3 {
+      font-weight: normal;
+      margin-bottom: 8px;
+      color: #7a2634;
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .time-box {
+      min-width: 75px;
+    }
+
+    .time-number {
+      font-size: 38px;
+      color: #522b31;
+    }
+
+    .time-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #806d5d;
+    }
+
+    .footer {
+      padding: 60px 25px;
+      text-align: center;
+      background: #522b31;
+      color: #f5eee4;
+    }
+
+    .footer-logo {
+      font-size: 28px;
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .envelope {
+        height: 230px;
+      }
+
+      .names {
+        font-size: 48px;
+      }
+
+      .section {
+        padding: 70px 20px;
+      }
+
+      .countdown {
+        gap: 18px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ENVELOPE -->
+
+  <div class="envelope-screen" id="envelopeScreen">
+    <div class="envelope" onclick="openInvitation()">
+      <div class="envelope-back"></div>
+      <div class="envelope-flap" id="flap"></div>
+      <div class="envelope-front"></div>
+
+```
+  <div class="seal">♥</div>
+
+  <div class="envelope-text">
+    Սեղմեք՝ հրավիրատոմսը բացելու համար
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- INVITATION -->
+
+  <main class="invitation" id="invitation">
+
+```
+<section class="hero">
+  <div class="hero-inner">
+
+    <div class="small-title">
+      Մեր հարսանիքը
+    </div>
+
+    <h1 class="names">
+      Արամ
+      <div class="ampersand">&</div>
+      Սաթենիկ
+    </h1>
+
+    <div class="divider"></div>
+
+    <div class="date">
+      21 · 08 · 2026
+    </div>
+
+    <div class="message">
+      Սիրով հրավիրում ենք Ձեզ կիսելու
+      մեր կյանքի ամենակարևոր ու գեղեցիկ
+      օրվա ուրախությունը։
+    </div>
+
+  </div>
+</section>
+
+
+<!-- COUNTDOWN -->
+<section class="section">
+
+  <h2 class="section-title">
+    Մինչև մեր օրը
+  </h2>
+
+  <div class="countdown">
+
+    <div class="time-box">
+      <div class="time-number" id="days">0</div>
+      <div class="time-label">օր</div>
+    </div>
+
+    <div class="time-box">
+      <div class="time-number" id="hours">0</div>
+      <div class="time-label">ժամ</div>
+    </div>
+
+    <div class="time-box">
+      <div class="time-number" id="minutes">0</div>
+      <div class="time-label">րոպե</div>
+    </div>
+
+    <div class="time-box">
+      <div class="time-number" id="seconds">0</div>
+      <div class="time-label">վայրկյան</div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- DETAILS -->
+<section class="section">
+
+  <h2 class="section-title">
+    Օրվա ծրագիրը
+  </h2>
+
+  <div class="details">
+
+    <div class="detail">
+      <h3>Պսակադրություն</h3>
+      <p>15:00</p>
+      <p>Սուրբ Գրիգոր Լուսավորիչ եկեղեցի</p>
+    </div>
+
+    <div class="detail">
+      <h3>Հարսանյաց հանդիսություն</h3>
+      <p>17:30</p>
+      <p>Մորենա ռեստորան</p>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- RSVP -->
+<section class="section">
+
+  <h2 class="section-title">
+    Կսպասենք Ձեզ
+  </h2>
+
+  <p class="message">
+    Խնդրում ենք հաստատել Ձեր մասնակցությունը։
+  </p>
+
+</section>
+
+
+<footer class="footer">
+
+  <div class="footer-logo">
+    EVENTO
+  </div>
+
+  <p>
+    Ձեր գեղեցիկ պատմությունը՝ մեկ հրավիրատոմսում։
+  </p>
+
+</footer>
+```
+
+  </main>
+
+  <script>
+
+    function openInvitation() {
+
+      document.getElementById("flap").style.transform =
+        "rotateX(180deg)";
+
+      setTimeout(function() {
+
+        document.getElementById("envelopeScreen").style.display =
+          "none";
+
+        document.getElementById("invitation").style.display =
+          "block";
+
+      }, 900);
+    }
+
+
+    const weddingDate =
+      new Date("August 21, 2026 15:00:00").getTime();
+
+
+    function updateCountdown() {
+
+      const now = new Date().getTime();
+
+      const difference = weddingDate - now;
+
+      if (difference <= 0) {
+
+        document.getElementById("days").innerText = "0";
+        document.getElementById("hours").innerText = "0";
+        document.getElementById("minutes").innerText = "0";
+        document.getElementById("seconds").innerText = "0";
+
+        return;
+      }
+
+      const days =
+        Math.floor(difference / (1000 * 60 * 60 * 24));
+
+      const hours =
+        Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) /
+          (1000 * 60 * 60)
+        );
+
+      const minutes =
+        Math.floor(
+          (difference % (1000 * 60 * 60)) /
+          (1000 * 60)
+        );
+
+      const seconds =
+        Math.floor(
+          (difference % (1000 * 60)) /
+          1000
+        );
+
+
+      document.getElementById("days").innerText = days;
+      document.getElementById("hours").innerText = hours;
+      document.getElementById("minutes").innerText = minutes;
+      document.getElementById("seconds").innerText = seconds;
+    }
+
+
+    updateCountdown();
+
+    setInterval(updateCountdown, 1000);
+
+  </script>
+
+</body>
+</html>
