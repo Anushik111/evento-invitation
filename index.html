@@ -1,16 +1,45 @@
+```html
 <!DOCTYPE html>
 <html lang="hy">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Արամ & Սաթենիկ</title>
+<title>Արամ & Սաթենիկ | Evento</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Noto+Serif+Armenian:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+
+/* =====================================================
+   COLORS
+===================================================== */
+
+:root{
+    --cream:#f4eee5;
+    --paper:#fcfaf6;
+    --paper2:#eee4d7;
+
+    --burgundy:#713b42;
+    --burgundy-dark:#572c32;
+    --burgundy-light:#8d5960;
+
+    --gold:#b59a70;
+
+    --brown:#332925;
+    --muted:#81766d;
+
+    --line:rgba(65,48,40,.14);
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
 *{
     margin:0;
     padding:0;
@@ -22,15 +51,15 @@ html{
 }
 
 body{
-    background:#f5efe7;
-    color:#29231f;
+    background:var(--cream);
+    color:var(--brown);
     font-family:"Noto Serif Armenian",serif;
     overflow-x:hidden;
 }
 
 
 /* =====================================================
-   FIRST PAGE — ENVELOPE
+   OPENING
 ===================================================== */
 
 #opening{
@@ -42,16 +71,24 @@ body{
     align-items:center;
     justify-content:center;
 
-    background:#e5dbcd;
+    background:
+        radial-gradient(
+            circle at 50% 25%,
+            rgba(255,255,255,.8),
+            transparent 48%
+        ),
+        linear-gradient(
+            135deg,
+            #eee4d7,
+            #ded0bf
+        );
 
-    transition:
-        opacity 1.2s ease,
-        visibility 1.2s ease;
-}
-
-#opening.closed{
     opacity:1;
     visibility:visible;
+
+    transition:
+        opacity 1.3s ease,
+        visibility 1.3s ease;
 }
 
 #opening.open{
@@ -61,118 +98,197 @@ body{
 }
 
 
-/* Background */
+/* =====================================================
+   OPENING DECORATION
+===================================================== */
 
 .opening-bg{
     position:absolute;
     inset:0;
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(255,255,255,.35),
-            transparent 60%
-        );
-
     pointer-events:none;
+    overflow:hidden;
+}
+
+.opening-bg::before,
+.opening-bg::after{
+    content:"";
+    position:absolute;
+
+    width:420px;
+    height:420px;
+
+    border:1px solid rgba(113,59,66,.12);
+    border-radius:50%;
+}
+
+.opening-bg::before{
+    top:-210px;
+    left:-210px;
+}
+
+.opening-bg::after{
+    right:-210px;
+    bottom:-210px;
 }
 
 
-/* Envelope container */
+/* =====================================================
+   ENVELOPE AREA
+===================================================== */
 
 .envelope-area{
     position:relative;
 
-    width:min(92vw,1100px);
+    width:min(88vw,720px);
+    aspect-ratio:1.55 / 1;
 
     cursor:pointer;
 
-    text-align:center;
+    filter:
+        drop-shadow(
+            0 35px 45px rgba(60,40,30,.20)
+        );
 
-    user-select:none;
+    animation:envelopeFloat 4s ease-in-out infinite;
+}
+
+@keyframes envelopeFloat{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-7px);
+    }
+
 }
 
 
-/* Realistic envelope */
+/* =====================================================
+   ENVELOPE
+===================================================== */
 
-.envelope-photo{
-    position:relative;
-
-    width:100%;
-    height:auto;
-
-    display:block;
-
-    border-radius:2px;
-
-    box-shadow:
-        0 35px 80px rgba(50,38,28,.28);
-
-    transition:
-        transform 1.5s cubic-bezier(.7,0,.2,1),
-        filter 1.5s ease,
-        opacity 1.1s ease;
-}
-
-
-/* Dark/soft overlay */
-
-.envelope-shade{
+.envelope{
     position:absolute;
     inset:0;
 
     background:
         linear-gradient(
-            to bottom,
-            rgba(255,255,255,.04),
-            rgba(40,25,15,.15)
+            145deg,
+            #f9f1e7,
+            #e7d7c7
+        );
+
+    border-radius:4px;
+
+    overflow:visible;
+
+    border:1px solid rgba(100,70,50,.15);
+}
+
+
+/* envelope bottom */
+
+.envelope-bottom{
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            135deg,
+            transparent 49.7%,
+            rgba(113,59,66,.08) 50%,
+            transparent 50.3%
         );
 
     pointer-events:none;
 }
 
 
-/* Letter that appears when opening */
+/* left fold */
+
+.envelope-left{
+    position:absolute;
+
+    left:0;
+    bottom:0;
+
+    width:50%;
+    height:100%;
+
+    clip-path:polygon(
+        0 0,
+        100% 50%,
+        0 100%
+    );
+
+    background:#e3d2c1;
+
+    opacity:.75;
+}
+
+
+/* right fold */
+
+.envelope-right{
+    position:absolute;
+
+    right:0;
+    bottom:0;
+
+    width:50%;
+    height:100%;
+
+    clip-path:polygon(
+        100% 0,
+        0 50%,
+        100% 100%
+    );
+
+    background:#ddcbbb;
+
+    opacity:.75;
+}
+
+
+/* =====================================================
+   LETTER
+===================================================== */
 
 .letter{
     position:absolute;
 
-    left:16%;
-    width:68%;
+    left:12%;
+    width:76%;
 
-    top:35%;
+    top:12%;
 
-    height:55%;
+    height:76%;
 
     background:
         linear-gradient(
             145deg,
-            #fffdf9,
-            #f1e9dd
+            #fffdfa,
+            #f5ede3
         );
 
-    border:1px solid rgba(80,60,45,.15);
+    border:1px solid rgba(90,65,50,.16);
 
     box-shadow:
-        0 25px 60px rgba(40,30,20,.25);
+        0 18px 40px rgba(50,35,25,.16);
 
     display:flex;
-    align-items:center;
-    justify-content:center;
-
     flex-direction:column;
 
-    z-index:-1;
+    justify-content:center;
+    align-items:center;
 
-    opacity:0;
-
-    transform:
-        translateY(80px)
-        scale(.95);
+    z-index:2;
 
     transition:
         transform 1.25s cubic-bezier(.2,.8,.2,1),
-        opacity .7s ease;
+        opacity .8s ease;
 }
 
 .letter::before{
@@ -180,9 +296,24 @@ body{
 
     position:absolute;
 
-    inset:14px;
+    inset:12px;
 
     border:1px solid rgba(113,59,66,.18);
+}
+
+
+/* letter text */
+
+.letter-small{
+    position:relative;
+
+    font-size:9px;
+
+    letter-spacing:4px;
+
+    color:var(--muted);
+
+    margin-bottom:15px;
 }
 
 .letter-name{
@@ -190,133 +321,229 @@ body{
 
     font-family:"Cormorant Garamond",serif;
 
-    font-size:clamp(28px,5vw,58px);
+    font-size:clamp(28px,5vw,55px);
 
-    letter-spacing:4px;
+    letter-spacing:3px;
 
-    color:#713b42;
+    color:var(--burgundy);
 }
 
 .letter-date{
     position:relative;
 
-    margin-top:15px;
+    margin-top:12px;
 
     font-family:"Cormorant Garamond",serif;
 
-    font-size:18px;
+    font-size:17px;
 
     letter-spacing:5px;
 
-    color:#9a8464;
+    color:var(--gold);
 }
 
 
-/* Text over envelope */
+/* =====================================================
+   FLAP
+===================================================== */
+
+.flap{
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:58%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f6eadc,
+            #e1cdbb
+        );
+
+    clip-path:polygon(
+        0 0,
+        100% 0,
+        50% 100%
+    );
+
+    transform-origin:top center;
+
+    z-index:5;
+
+    transition:
+        transform 1.25s cubic-bezier(.7,0,.2,1);
+}
+
+
+/* =====================================================
+   STAMP
+===================================================== */
+
+.stamp{
+    position:absolute;
+
+    left:50%;
+    top:48%;
+
+    transform:translate(-50%,-50%);
+
+    width:86px;
+    height:86px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            var(--burgundy-light),
+            var(--burgundy-dark)
+        );
+
+    border:
+        4px solid #d8bfa0;
+
+    outline:
+        1px solid rgba(255,255,255,.45);
+
+    box-shadow:
+        0 5px 15px rgba(70,35,35,.25);
+
+    z-index:10;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#f5e9da;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:22px;
+
+    letter-spacing:1px;
+
+    transition:
+        transform .8s ease,
+        opacity .5s ease;
+}
+
+.stamp::before{
+    content:"";
+
+    position:absolute;
+
+    inset:7px;
+
+    border:1px dashed rgba(245,233,218,.7);
+
+    border-radius:50%;
+}
+
+.stamp span{
+    position:relative;
+}
+
+
+/* =====================================================
+   OPENING TEXT
+===================================================== */
 
 .opening-text{
     position:absolute;
 
     left:50%;
-    bottom:7%;
+    bottom:-105px;
 
     transform:translateX(-50%);
 
-    width:90%;
+    text-align:center;
 
-    z-index:5;
+    width:100%;
 
-    color:#513d30;
+    color:var(--burgundy);
 
     transition:
         opacity .5s ease,
-        transform .8s ease;
+        transform .7s ease;
 }
 
 .opening-title{
     font-family:"Cormorant Garamond",serif;
 
-    font-size:clamp(38px,7vw,76px);
+    font-size:clamp(31px,5vw,55px);
 
-    line-height:.8;
-
-    font-weight:400;
-
-    text-shadow:
-        0 2px 15px rgba(255,255,255,.8);
+    letter-spacing:2px;
 }
 
-.opening-title span{
-    display:block;
+.opening-subtitle{
+    margin-top:9px;
 
-    font-family:"Noto Serif Armenian",serif;
+    font-size:11px;
 
-    font-size:18px;
+    letter-spacing:4px;
 
-    margin:20px 0;
-}
-
-.opening-date{
-    font-family:"Cormorant Garamond",serif;
-
-    font-size:20px;
-
-    letter-spacing:6px;
+    color:var(--muted);
 }
 
 .click-text{
-    margin-top:22px;
+    margin-top:18px;
 
-    font-size:10px;
+    font-size:9px;
 
     letter-spacing:3px;
+
+    color:var(--burgundy);
 
     animation:pulse 2s infinite;
 }
 
 @keyframes pulse{
+
     0%,100%{
-        opacity:.45;
+        opacity:.4;
     }
 
     50%{
         opacity:1;
     }
-}
 
-
-/* OPEN ANIMATION */
-
-#opening.is-opening .envelope-photo{
-    transform:
-        scale(1.15)
-        translateY(5%);
-
-    filter:
-        brightness(1.08)
-        blur(1px);
-}
-
-#opening.is-opening .letter{
-    z-index:10;
-
-    opacity:1;
-
-    transform:
-        translateY(-65%)
-        scale(1);
-}
-
-#opening.is-opening .opening-text{
-    opacity:0;
-
-    transform:
-        translate(-50%,-30px);
 }
 
 
 /* =====================================================
-   MAIN INVITATION
+   OPEN ANIMATION
+===================================================== */
+
+#opening.is-opening .flap{
+    transform:rotateX(180deg);
+}
+
+#opening.is-opening .stamp{
+    transform:
+        translate(-50%,-50%)
+        scale(.75);
+
+    opacity:0;
+}
+
+#opening.is-opening .letter{
+    transform:
+        translateY(-45%)
+        scale(1.03);
+}
+
+#opening.is-opening .opening-text{
+    opacity:0;
+    transform:
+        translate(-50%,-20px);
+}
+
+
+/* =====================================================
+   INVITATION
 ===================================================== */
 
 #invitation{
@@ -325,13 +552,12 @@ body{
     transform:translateY(30px);
 
     transition:
-        opacity 1.2s ease,
-        transform 1.2s ease;
+        opacity 1.4s ease,
+        transform 1.4s ease;
 }
 
 #invitation.visible{
     opacity:1;
-
     transform:none;
 }
 
@@ -341,12 +567,11 @@ body{
 ===================================================== */
 
 .hero{
-    min-height:100vh;
+    min-height:100svh;
 
     display:flex;
 
     align-items:center;
-
     justify-content:center;
 
     flex-direction:column;
@@ -370,7 +595,7 @@ body{
 
     letter-spacing:6px;
 
-    color:#713b42;
+    color:var(--burgundy);
 
     margin-bottom:30px;
 }
@@ -379,7 +604,7 @@ body{
     width:1px;
     height:65px;
 
-    background:#b49a72;
+    background:var(--gold);
 
     margin-bottom:30px;
 }
@@ -403,7 +628,7 @@ body{
 
     font-size:20px;
 
-    color:#713b42;
+    color:var(--burgundy);
 
     margin:25px 0;
 }
@@ -416,6 +641,8 @@ body{
     font-size:25px;
 
     letter-spacing:7px;
+
+    color:var(--burgundy);
 }
 
 
@@ -428,10 +655,10 @@ body{
 
     padding:14px 0;
 
-    border-top:1px solid rgba(60,45,35,.13);
-    border-bottom:1px solid rgba(60,45,35,.13);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
 
-    background:#fbf8f3;
+    background:var(--paper);
 }
 
 .marquee-track{
@@ -453,13 +680,15 @@ body{
 
     letter-spacing:5px;
 
-    color:#713b42;
+    color:var(--burgundy);
 }
 
 @keyframes marquee{
+
     to{
         transform:translateX(-50%);
     }
+
 }
 
 
@@ -482,7 +711,7 @@ body{
 
     letter-spacing:4px;
 
-    color:#713b42;
+    color:var(--burgundy);
 
     margin-bottom:20px;
 }
@@ -566,7 +795,7 @@ body{
 
     letter-spacing:6px;
 
-    color:#713b42;
+    color:var(--burgundy);
 
     margin-bottom:45px;
 }
@@ -576,9 +805,9 @@ body{
 
     margin:auto;
 
-    border-top:1px solid rgba(50,40,30,.13);
+    border-top:1px solid var(--line);
 
-    border-bottom:1px solid rgba(50,40,30,.13);
+    border-bottom:1px solid var(--line);
 
     padding:25px 10px;
 }
@@ -595,7 +824,7 @@ body{
 .weekdays{
     font-size:10px;
 
-    color:#81766d;
+    color:var(--muted);
 
     margin-bottom:15px;
 }
@@ -634,7 +863,7 @@ body{
 
     border-radius:50%;
 
-    background:#713b42;
+    background:var(--burgundy);
 
     z-index:-1;
 }
@@ -647,7 +876,7 @@ body{
 .events{
     padding:110px 20px;
 
-    background:#fbf8f3;
+    background:var(--paper);
 }
 
 .events-title{
@@ -679,11 +908,11 @@ body{
 
     padding:28px 0;
 
-    border-bottom:1px solid rgba(50,40,30,.13);
+    border-bottom:1px solid var(--line);
 }
 
 .event:first-child{
-    border-top:1px solid rgba(50,40,30,.13);
+    border-top:1px solid var(--line);
 }
 
 .time{
@@ -691,7 +920,7 @@ body{
 
     font-size:30px;
 
-    color:#713b42;
+    color:var(--burgundy);
 }
 
 .event h3{
@@ -703,7 +932,7 @@ body{
 }
 
 .event p{
-    color:#81766d;
+    color:var(--muted);
 
     font-size:12px;
 }
@@ -776,7 +1005,7 @@ body{
 .countdown-section{
     padding:110px 20px;
 
-    background:#713b42;
+    background:var(--burgundy);
 
     color:white;
 
@@ -851,7 +1080,7 @@ body{
 
     padding:10px;
 
-    background:#fbf8f3;
+    background:var(--paper);
 
     box-shadow:
         0 15px 40px rgba(50,38,30,.08);
@@ -883,7 +1112,7 @@ body{
 .rsvp{
     padding:110px 20px;
 
-    background:#fbf8f3;
+    background:var(--paper);
 
     text-align:center;
 }
@@ -899,7 +1128,7 @@ body{
 }
 
 .rsvp-subtitle{
-    color:#81766d;
+    color:var(--muted);
 
     font-size:13px;
 
@@ -925,7 +1154,7 @@ body{
 
     letter-spacing:1px;
 
-    color:#81766d;
+    color:var(--muted);
 
     margin-bottom:8px;
 }
@@ -937,7 +1166,7 @@ body{
 
     padding:14px;
 
-    border:1px solid rgba(50,40,30,.15);
+    border:1px solid var(--line);
 
     background:#fffdfa;
 
@@ -955,9 +1184,9 @@ body{
 .submit{
     width:100%;
 
-    border:1px solid #713b42;
+    border:1px solid var(--burgundy);
 
-    background:#713b42;
+    background:var(--burgundy);
 
     color:white;
 
@@ -971,7 +1200,7 @@ body{
 .submit:hover{
     background:transparent;
 
-    color:#713b42;
+    color:var(--burgundy);
 }
 
 
@@ -998,7 +1227,7 @@ footer p{
 
     letter-spacing:4px;
 
-    color:#81766d;
+    color:var(--muted);
 
     margin-top:10px;
 }
@@ -1014,22 +1243,31 @@ footer p{
     right:20px;
     bottom:20px;
 
-    width:50px;
-    height:50px;
+    width:52px;
+    height:52px;
 
     border-radius:50%;
 
-    border:1px solid #713b42;
+    border:1px solid var(--burgundy);
 
-    background:rgba(251,248,243,.95);
+    background:rgba(251,248,243,.96);
 
-    color:#713b42;
+    color:var(--burgundy);
 
     z-index:999;
 
     cursor:pointer;
 
     font-size:18px;
+
+    box-shadow:
+        0 8px 25px rgba(60,40,30,.14);
+
+    transition:.3s;
+}
+
+.music-button:hover{
+    transform:scale(1.08);
 }
 
 
@@ -1039,22 +1277,32 @@ footer p{
 
 @media(max-width:600px){
 
+    .envelope-area{
+        width:88vw;
+        aspect-ratio:1.35 / 1;
+    }
+
+    .opening-text{
+        bottom:-90px;
+    }
+
     .opening-title{
-        font-size:47px;
+        font-size:38px;
     }
 
-    .opening-title span{
-        font-size:15px;
-
-        margin:15px 0;
-    }
-
-    .opening-date{
-        font-size:17px;
+    .opening-subtitle{
+        font-size:8px;
+        letter-spacing:2px;
     }
 
     .click-text{
-        font-size:8px;
+        font-size:7px;
+    }
+
+    .stamp{
+        width:68px;
+        height:68px;
+        font-size:18px;
     }
 
     .letter{
@@ -1062,8 +1310,12 @@ footer p{
         width:80%;
     }
 
-    .hero{
-        min-height:100svh;
+    .letter-name{
+        font-size:25px;
+    }
+
+    .letter-date{
+        font-size:13px;
     }
 
     .names{
@@ -1089,7 +1341,6 @@ footer p{
 
     .gallery-item:first-child{
         grid-column:auto;
-
         height:430px;
     }
 
@@ -1107,7 +1358,6 @@ footer p{
 
     .event{
         grid-template-columns:75px 1fr;
-
         gap:15px;
     }
 
@@ -1137,66 +1387,67 @@ footer p{
 
 
 <!-- =====================================================
-     FIRST PAGE
+     OPENING
 ===================================================== -->
 
 <div id="opening">
 
     <div class="opening-bg"></div>
 
-
     <div
         class="envelope-area"
         id="envelopeArea"
         onclick="openInvitation()"
+        role="button"
+        tabindex="0"
+        aria-label="Բացել հրավիրատոմսը"
     >
 
-        <!-- REALISTIC ENVELOPE -->
+        <div class="envelope">
 
-        <img
-            src="./envelope-realistic.jpg"
-            class="envelope-photo"
-            alt="Հարսանեկան ծրար"
-        >
+            <div class="letter">
 
+                <div class="letter-small">
+                    ՀՐԱՎԵՐ
+                </div>
 
-        <div class="envelope-shade"></div>
+                <div class="letter-name">
+                    ԱՐԱՄ & ՍԱԹԵՆԻԿ
+                </div>
 
+                <div class="letter-date">
+                    21 · 08 · 2026
+                </div>
 
-        <!-- LETTER -->
-
-        <div class="letter">
-
-            <div class="letter-name">
-                ԱՐԱՄ & ՍԱԹԵՆԻԿ
             </div>
 
-            <div class="letter-date">
-                21 · 08 · 2026
+
+            <div class="envelope-bottom"></div>
+
+            <div class="envelope-left"></div>
+
+            <div class="envelope-right"></div>
+
+
+            <div class="flap"></div>
+
+
+            <div class="stamp">
+                <span>A & S</span>
             </div>
 
         </div>
 
 
-        <!-- TEXT -->
-
         <div class="opening-text">
 
             <div class="opening-title">
-
-                Արամ
-
-                <span>&</span>
-
-                Սաթենիկ
-
+                Արամ & Սաթենիկ
             </div>
 
-
-            <div class="opening-date">
-                21 · 08 · 2026
+            <div class="opening-subtitle">
+                ՀԱՏՈՒԿ ՀՐԱՎԵՐ
             </div>
-
 
             <div class="click-text">
                 ՍԵՂՄԵՔ ԾՐԱՐԻ ՎՐԱ՝ ԲԱՑԵԼՈՒ ՀԱՄԱՐ
@@ -1217,8 +1468,6 @@ footer p{
 <main id="invitation">
 
 
-<!-- HERO -->
-
 <section class="hero">
 
     <div class="hero-small">
@@ -1228,13 +1477,13 @@ footer p{
     <div class="hero-line"></div>
 
     <div class="names">
-
         Արամ
 
-        <span class="amp">&</span>
+        <span class="amp">
+            &
+        </span>
 
         Սաթենիկ
-
     </div>
 
     <div class="hero-date">
@@ -1245,8 +1494,6 @@ footer p{
 
 
 
-<!-- MARQUEE -->
-
 <div class="marquee">
 
     <div class="marquee-track">
@@ -1254,6 +1501,7 @@ footer p{
         <span>ԱՐԱՄ & ՍԱԹԵՆԻԿ</span>
         <span>21 · 08 · 2026</span>
         <span>OUR WEDDING DAY</span>
+
         <span>ԱՐԱՄ & ՍԱԹԵՆԻԿ</span>
         <span>21 · 08 · 2026</span>
         <span>OUR WEDDING DAY</span>
@@ -1263,8 +1511,6 @@ footer p{
 </div>
 
 
-
-<!-- INTRO -->
 
 <section class="intro">
 
@@ -1286,8 +1532,6 @@ footer p{
 
 
 
-<!-- PHOTO -->
-
 <section class="main-photo">
 
     <img
@@ -1298,8 +1542,6 @@ footer p{
 </section>
 
 
-
-<!-- DATE -->
 
 <section class="date-section">
 
@@ -1315,7 +1557,6 @@ footer p{
         2026
     </div>
 
-
     <div class="calendar">
 
         <div class="weekdays">
@@ -1327,7 +1568,6 @@ footer p{
             <div>Շաբ</div>
             <div>Կիր</div>
         </div>
-
 
         <div class="days">
 
@@ -1385,8 +1625,6 @@ footer p{
 </section>
 
 
-
-<!-- EVENTS -->
 
 <section class="events">
 
@@ -1466,8 +1704,6 @@ footer p{
 
 
 
-<!-- GALLERY -->
-
 <section class="gallery">
 
     <div class="gallery-title">
@@ -1520,8 +1756,6 @@ footer p{
 
 
 
-<!-- COUNTDOWN -->
-
 <section class="countdown-section">
 
     <div class="label">
@@ -1532,54 +1766,26 @@ footer p{
         Հաշվում ենք օրերը
     </h2>
 
-
     <div class="countdown">
 
         <div>
-            <span
-                class="count-number"
-                id="days"
-            >0</span>
-
-            <span class="count-label">
-                ՕՐ
-            </span>
+            <span class="count-number" id="days">0</span>
+            <span class="count-label">ՕՐ</span>
         </div>
 
-
         <div>
-            <span
-                class="count-number"
-                id="hours"
-            >0</span>
-
-            <span class="count-label">
-                ԺԱՄ
-            </span>
+            <span class="count-number" id="hours">0</span>
+            <span class="count-label">ԺԱՄ</span>
         </div>
 
-
         <div>
-            <span
-                class="count-number"
-                id="minutes"
-            >0</span>
-
-            <span class="count-label">
-                ՐՈՊԵ
-            </span>
+            <span class="count-number" id="minutes">0</span>
+            <span class="count-label">ՐՈՊԵ</span>
         </div>
 
-
         <div>
-            <span
-                class="count-number"
-                id="seconds"
-            >0</span>
-
-            <span class="count-label">
-                ՎՐԿ.
-            </span>
+            <span class="count-number" id="seconds">0</span>
+            <span class="count-label">ՎՐԿ.</span>
         </div>
 
     </div>
@@ -1587,8 +1793,6 @@ footer p{
 </section>
 
 
-
-<!-- MAP -->
 
 <section class="maps">
 
@@ -1613,8 +1817,8 @@ footer p{
 
         <iframe
             src="https://www.google.com/maps?q=Yerevan%20Armenia&output=embed"
-            loading="lazy"
-        ></iframe>
+            loading="lazy">
+        </iframe>
 
     </div>
 
@@ -1627,16 +1831,14 @@ footer p{
 
         <iframe
             src="https://www.google.com/maps?q=Morena%20Restaurant%20Yerevan&output=embed"
-            loading="lazy"
-        ></iframe>
+            loading="lazy">
+        </iframe>
 
     </div>
 
 </section>
 
 
-
-<!-- RSVP -->
 
 <section class="rsvp">
 
@@ -1764,16 +1966,21 @@ footer p{
 
 <audio
     id="music"
-    src="./music.mp3"
     preload="auto"
     loop
-></audio>
+>
+    <source
+        src="https://cdn.pixabay.com/audio/2022/10/25/audio_946b7a3c4f.mp3"
+        type="audio/mpeg"
+    >
+</audio>
 
 
 <button
     id="musicButton"
     class="music-button"
     onclick="toggleMusic()"
+    aria-label="Երաժշտություն"
 >
     ♪
 </button>
@@ -1783,10 +1990,16 @@ footer p{
 <script>
 
 /* =====================================================
-   OPEN ENVELOPE
+   VARIABLES
 ===================================================== */
 
 let opened = false;
+let musicPlaying = false;
+
+
+/* =====================================================
+   OPEN INVITATION
+===================================================== */
 
 function openInvitation(){
 
@@ -1795,7 +2008,6 @@ function openInvitation(){
     }
 
     opened = true;
-
 
     const opening =
         document.getElementById("opening");
@@ -1810,13 +2022,9 @@ function openInvitation(){
         document.getElementById("musicButton");
 
 
-    /*
-       Երգը միանում է հենց ծրարի CLICK-ի ժամանակ։
-       Սա կարևոր է, որովհետև browser-ը թույլ է տալիս
-       audio autoplay միայն user interaction-ից հետո։
-    */
+    /* Music starts after user click */
 
-    music.volume = 0.8;
+    music.volume = 0.65;
 
     music.play()
         .then(function(){
@@ -1829,23 +2037,19 @@ function openInvitation(){
         .catch(function(error){
 
             console.log(
-                "Music could not start:",
+                "Music start error:",
                 error
             );
 
         });
 
 
-    /*
-       Բացում ենք ծրարը
-    */
+    /* Opening animation */
 
     opening.classList.add("is-opening");
 
 
-    /*
-       Animation-ից հետո առաջին էջը անհետանում է
-    */
+    /* Show invitation */
 
     setTimeout(function(){
 
@@ -1853,20 +2057,19 @@ function openInvitation(){
 
         invitation.classList.add("visible");
 
-        window.scrollTo(0,0);
+        window.scrollTo({
+            top:0,
+            behavior:"instant"
+        });
 
     },1500);
 
 }
 
 
-
 /* =====================================================
    MUSIC
 ===================================================== */
-
-let musicPlaying = false;
-
 
 function toggleMusic(){
 
@@ -1899,14 +2102,16 @@ function toggleMusic(){
             })
             .catch(function(error){
 
-                console.log(error);
+                console.log(
+                    "Music error:",
+                    error
+                );
 
             });
 
     }
 
 }
-
 
 
 /* =====================================================
@@ -1931,15 +2136,11 @@ function countdown(){
     if(distance <= 0){
 
         document.getElementById("days").textContent = "0";
-
         document.getElementById("hours").textContent = "0";
-
         document.getElementById("minutes").textContent = "0";
-
         document.getElementById("seconds").textContent = "0";
 
         return;
-
     }
 
 
@@ -1990,7 +2191,6 @@ setInterval(
 );
 
 
-
 /* =====================================================
    RSVP
 ===================================================== */
@@ -2004,7 +2204,6 @@ function sendRSVP(event){
     );
 
 }
-
 
 
 /* =====================================================
@@ -2035,3 +2234,4 @@ document
 
 </body>
 </html>
+```
